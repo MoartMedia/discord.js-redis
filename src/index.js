@@ -26,7 +26,7 @@ class RedisClient extends EventEmitter {
     c.on('messageDelete', m => this.interface.removeMessage(m));
     c.on('messageDeleteBulk', (messages) => {
       const q = this.client.multi();
-      messages.forEach(m => q.sremAsync('messages', m.id));
+      messages.forEach(m => this.interface.removeMessage(m));
       return q.execAsync();
     });
 
