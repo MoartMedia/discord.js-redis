@@ -12,10 +12,10 @@ module.exports = class RedisInterface {
   init(client) {
     const q = this.client.multi();
 
-    client.users.cache.forEach(u => q._addData('users', u.id, u));
-    client.guilds.cache.forEach(g => q._addData('guilds', g.id, g));
-    client.emojis.cache.forEach(e => q._addData('emojis', e.id, e));
-    client.channels.cache.forEach(c => q._addData('channels', c.id, c));
+    client.users.cache.forEach((u) => { q.sadd('users', u.id); q.set(`users:${u.id}`, u); });
+    client.guilds.cache.forEach((g) => { q.sadd('guilds', g.id); q.set(`guilds:${g.id}`, g); });
+    client.emojis.cache.forEach((e) => { q.sadd('emojis', g.id); q.set(`emojis:${e.id}`, e); });
+    client.channels.cache.forEach((c) => { q.sadd('channels', c.id); q.set(`channels:${c.id}`, c); });
 
     return this.client.flushallAsync().then(() => q.execAsync());
   }
